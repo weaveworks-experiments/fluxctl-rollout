@@ -2,7 +2,8 @@
 
 fluxctl-rollout is a prototype of a hypothetical fluxctl rollout subcommand.
 
-It operates directly on Istio-Kubernetes yaml files only and assumes gitops for
+It operates directly on Istio-Kubernetes yaml files only and assumes
+[gitops](https://www.weave.works/blog/gitops-operations-by-pull-request) for
 the rest.  All state required is stored in annotations on Deployment objects
 (probably).
 
