@@ -59,7 +59,7 @@ New tag: myapp:master-8da5ca3
 Check your monitoring to see if you like the new version.
 Use 'fluxctl-rollout a1b2c3d4e5 abort' to cancel, or 'fluxctl-rollout a1b2c3d4e5 complete' to finish the rollout.
 
-$ fluxctl-rollout release a1b2c3d4e5 
+$ fluxctl-rollout release a1b2c3d4e5
 Completing rollout... done.
 100% user traffic now reaching New deployment.
 Cleaning up Old deployment... done
