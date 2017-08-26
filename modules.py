@@ -13,14 +13,19 @@ class Yamels(object):
         raise(KeyError(deploymentName))
     def sync(self, *deployments):
         print "Syncing:",
+        # Record the deployments in-memory at least
         for d in deployments:
+            try:
+                self.find(d)
+            except KeyError:
+                self.deployments.append(d)
             print d,
         print
 
 class Deployment(object):
-    def __init__(self, name, replicas=0):
+    def __init__(self, name, replicas=0, primary=False):
         self.name = name
-        self.primary = False
+        self.primary = primary
         self.percent = 0
         self.replicas = replicas
     def __str__(self):
@@ -29,7 +34,7 @@ class Deployment(object):
 
 def replaceVersion(deploymentName, targetVersion):
     if "--" in deploymentName:
-        deploymentName, _ = deploymentName.split("--")[0]
+        deploymentName, _ = deploymentName.split("--")
     return deploymentName + "--" + targetVersion
 
 class Rollout(object):
