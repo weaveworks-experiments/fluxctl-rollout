@@ -41,7 +41,7 @@ New tag: myapp:master-8da5ca3
 URL for new tag: http://blah:39191/
 Use 'fluxctl-rollout abort a1b2c3d4e5' to cancel, or 'fluxctl-rollout release a1b2c3d4e5' to finish the rollout.
 
-$ fluxctl-rollout release a1b2c3d4e5 
+$ fluxctl-rollout release a1b2c3d4e5
 Completing rollout... done.
 100% user traffic now reaching New deployment.
 Cleaning up Old deployment... done
@@ -65,27 +65,41 @@ Completing rollout... done.
 Cleaning up Old deployment... done
 `)
 
+const istio_kube_config = `
+apiVersion: istio.io/v1alpha1
+kind: IstioConfig
+metadata:
+  name: route-rule-details-default
+  namespace: default
+spec:
+  destination: reviews.default.svc.cluster.local
+  precedence: 1
+  route:
+  - tags:
+      version: v1
+    weight: 50
+  - tags:
+      version: v3
+    weight: 50
+`
+
+const kube_dep_config = `
+`
+
 func (opts *rootOpts) Command() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:               "fluxctl-rollout",
-		Long:              rootLongHelp,
-		SilenceUsage:      true,
-		SilenceErrors:     true,
-		PersistentPreRunE: opts.PersistentPreRunE,
+		Use:           "fluxctl-rollout",
+		Long:          rootLongHelp,
+		SilenceUsage:  true,
+		SilenceErrors: true,
 	}
 
 	cmd.AddCommand(
 		newVersionCommand(),
-		newServiceShow(opts).Command(),
-		newServiceList(opts).Command(),
-		newServiceRelease(opts).Command(),
-		newServiceAutomate(opts).Command(),
-		newServiceDeautomate(opts).Command(),
-		newServiceLock(opts).Command(),
-		newServiceUnlock(opts).Command(),
-		newServicePolicy(opts).Command(),
-		newSave(opts).Command(),
-		newIdentity(opts).Command(),
+		newStage(opts).Command(),
+		newRelease(opts).Command(),
+		newList(opts).Command(),
+		newAbort(opts).Command(),
 	)
 
 	return cmd
