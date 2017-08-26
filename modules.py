@@ -47,8 +47,8 @@ class Rollout(object):
             replicas=self.originalReplicas,
         )
     def stage(self):
-        self.fromDeployment.percent = self.initialPercent
-        self.toDeployment.percent = 100 - self.initialPercent
+        self.toDeployment.percent = self.initialPercent
+        self.fromDeployment.percent = 100 - self.initialPercent
         self.yamels.sync(self.fromDeployment, self.toDeployment)
     def release(self):
         self.fromDeployment.primary = False
@@ -60,6 +60,7 @@ class Rollout(object):
     def abort(self):
         self.fromDeployment.percent = 100
         self.toDeployment.percent = 0
+        self.toDeployment.replicas = 0 # TODO: Delete this.
         self.yamels.sync(self.fromDeployment, self.toDeployment)
 
 class CanaryRollout(Rollout):
